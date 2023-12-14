@@ -1,5 +1,12 @@
 # HPC Docker Images
 
+## Images
+
+| Dockerfile                  | Description                                            |
+|-----------------------------|--------------------------------------------------------|
+| wsclean_idg_cuda.Dockerfile | [wsclean](https://gitlab.com/aroffringa/wsclean) with [IDG](https://gitlab.com/astron-idg/idg) and CUDA support                      |
+| tap.Dockerfile              | [Virtual Observatory Table Access Protocol (TAP)](https://pyvo.readthedocs.io/en/latest/) client |
+
 ## Determining your nvidia version
 
 find the gpu partitions
