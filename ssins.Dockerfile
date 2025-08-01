@@ -43,6 +43,12 @@ RUN update-alternatives --install /usr/bin/ipython ipython /usr/bin/ipython3 1
 # install dependencies not available on apt
 RUN python -m pip install pyuvdata
 RUN python -m pip install git+https://github.com/d3v-null/SSINS.git@eavils-copilot
+# stupid fucking scipy keeps changing their fucking API in minor releases.
+# this happens in EVERY FUCKING PROJECT I USE. FUCK.
+# WHY IS YOUR NEED TO CHANGE THE API TO MEET YOUR FUCKING OCD MORE IMPORTANT THAN PROVIDING A FUCKING STABLE API?
+# anyway, this is how cthulhu calls scipy, so we need to install it to the same version.
+# https://gitlab.com/chjordan/cthulhu/-/blob/master/cthulhu/reconstruct.py#L332
+RUN python -m pip install scipy==1.10.0
 RUN python -m pip install cthulhu
 
 ENTRYPOINT bash
