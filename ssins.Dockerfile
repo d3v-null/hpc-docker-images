@@ -42,9 +42,7 @@ RUN update-alternatives --install /usr/bin/ipython ipython /usr/bin/ipython3 1
 
 # install dependencies not available on apt
 RUN python -m pip install pyuvdata
-
-RUN git clone https://github.com/mwilensky768/SSINS.git /app
-WORKDIR /app
-RUN python setup.py install
+RUN python -m pip install git+https://github.com/d3v-null/SSINS.git@eavils-copilot
+RUN python -m pip install cthulhu
 
 ENTRYPOINT bash
