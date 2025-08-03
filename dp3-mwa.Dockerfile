@@ -1,6 +1,8 @@
 # https://gitlab.com/ska-telescope/sdp/ska-sdp-spack.git
 
 # docker build . -f dp3-mwa.Dockerfile --tag d3vnull0/dp3-mwa:latest --push
+# docker run --rm -it d3vnull0/dp3-mwa:latest
+# singularity pull -F /data/curtin_mwaeor/singularity/dp3-mwa.sif docker://d3vnull0/dp3-mwa:latest
 
 # ---------------------------
 # Builder Stage: Build environment, install dependencies, and generate Spack view
@@ -25,9 +27,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ;
 
 # Clone the custom Spack repository from GitLab
-# update packages/everybeam/package.py to add version('0.7.2', commit='v0.7.2', submodules=True)
+# Add version 0.7.2 to everybeam package
 RUN git clone https://gitlab.com/ska-telescope/sdp/ska-sdp-spack.git /opt/ska-sdp-spack && \
-    sed -i 's/version("0.7.1", commit="v0.7.1", submodules=True)/version("0.7.2", commit="v0.7.2", submodules=True)/' /opt/ska-sdp-spack/packages/everybeam/package.py && \
+    sed -i '/version('\''0.7.0'\'', commit='\''v0.7.0'\'', submodules=True)/a\    version('\''0.7.2'\'', commit='\''v0.7.2'\'', submodules=True)' /opt/ska-sdp-spack/packages/everybeam/package.py && \
     spack repo add /opt/ska-sdp-spack
 
 # Create a new Spack environment which writes to /opt
@@ -39,10 +41,11 @@ RUN --mount=type=cache,target=/opt/buildcache \
     spack config add "config:install_tree:root:/opt/software" && \
     spack config add "view:/opt/view" && \
     spack add \
-    'everybeam@:0.7.2' \
+    'hdf5+threadsafe' \
+    'everybeam@=0.7.2' \
     'dp3@master' \
     && \
-    spack install --no-check-signature --fail-fast
+    spack install --no-check-signature --fail-fast --test=root
 
 FROM ubuntu:jammy AS runtime
 
